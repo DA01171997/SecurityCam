@@ -1,5 +1,9 @@
 import RPi.GPIO as GPIO
 import time
+import atexit
+
+def run_cleanup():
+    GPIO.cleanup()
 
 class RangeFinder:
     """
@@ -22,6 +26,7 @@ class RangeFinder:
         GPIO.setmode(GPIO.BOARD)    # setup GPIO for breadboard
         GPIO.setup(self.trigger_pin, GPIO.OUT)  # setup trigger as output
         GPIO.setup(self.echo_pin, GPIO.IN)  # setup echo as input
+        atexit.register(run_cleanup)
 
     def _sample(self):
         """
@@ -47,8 +52,8 @@ class RangeFinder:
 
             duration = pulse_end - pulse_start  # get the difference in pulse times
             distance = round(duration * 17150, 2)   # convert to distance (cm)
-        except:
-            pass    # keep going if exception occurs
+        except Exception as e:
+            print('Exception during distance gathering:\n {0}'.format(str(e)))    # keep going if exception occurs
 
         return distance
 
@@ -61,9 +66,6 @@ class RangeFinder:
         samples = []
         while len(samples) < self.sample_size:
             samples.append(self._sample())
-        samples = list(filter(lambda x: x < 0, samples))
+        samples = [x for x in samples if x >= 0]
         dist = sum(samples) / len(samples)
         return dist
-
-    def __del__(self):
-        GPIO.cleanup()
