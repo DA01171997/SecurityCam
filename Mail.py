@@ -1,11 +1,17 @@
 import email, smtplib, ssl
+import os
+
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import os
+
 
 class Mail:
+    #creating the mail sender
+    #password is optional
+    #password won't get save if it isn't implicitly
+    #set at the time of creation
     def __init__(self, senderEmail, password=None):
         self.senderEmail=senderEmail
         self.password=password
@@ -13,35 +19,58 @@ class Mail:
         self.subjectHeader=None
         self.plainTextMessage=None
         self.emailAttachment=[]
+        self.htmlFlag=True
+        self.html=None
         
+    #add email of the receiver    
     def addReceiver(self, receiverEmail=None):
         if receiverEmail==None:
             self.receiverEmail = input("Enter receiver email -> ")
         else:
             self.receiverEmail = receiverEmail
 
+    #add subject header for the email
     def addSubjectHeader(self,subjectHeader=None):
         if subjectHeader ==None:
             self.subjectHeader = input("Enter subject header -> ")
         else:
             self.subjectHeader = subjectHeader
 
-    def addPlainTextBody(self,plainTextMessage=None):
+    #add a plaintext verision for the body of the email
+    #if html option is True, also add an HTML Version
+    def addPlainTextBody(self,plainTextMessage=None, html=False):
         if plainTextMessage ==None:
             self.plainTextMessage=input("Enter body message -> ")
         else:
             self.plainTextMessage=plainTextMessage
+        if html:
+            self.htmlFlag=html
+            self.html = """\
+            <html>
+                <body>
+                    <p>""" +  self.plainTextMessage + """
+                    </p>
+                </body>
+            </html>
+            """
     
+    #add attachment to the email by specifying the filename
+    #file need to be inside the same folder 
+    #or an absolute path is needed
+    #email can add multiple attachment
     def addAttachment(self, fileName=None):
         if fileName ==None:
             fileName = input("Enter name of the attachment file -> ")
         if os.path.isfile(fileName):
-            self.emailAttachment.append = fileName
+            self.emailAttachment.append(fileName)
         else:
             print("Error: addAttachment : "+fileName+" doesn't exists.")
 
-    def constructNSendMail(self):
-        
+    
+    #compile the email with all the necessary components
+    #then send
+    def constructNSendMail(self,password=None):
+
         #check for necessary components
         #else get it
         if self.receiverEmail==None:
@@ -50,53 +79,82 @@ class Mail:
             self.addSubjectHeader()
         if self.plainTextMessage==None:
             self.addPlainTextBody()
-        if self.password==None:
+
+        #if password wasn't set at the time of creation
+        #password won't get save permenantly
+        if self.password==None and password==None:
             password = input("Enter email password -> ")
+        if self.password!=None and password==None:
+            password = self.password
 
         #creat mail object
-        self.mail = MIMEMultipart()
-        self.mail["From"] = self.senderEmail
-        self.mail["To"] = self.receiverEmail
-        self.mail["Subject"] = self.subjectHeader
-        self.mail["Bcc"] = self.receiverEmail
+        mail = MIMEMultipart()
+        mail["From"] = self.senderEmail
+        mail["To"] = self.receiverEmail
+        mail["Subject"] = self.subjectHeader
+        mail["Bcc"] = self.receiverEmail
 
         #attach the plain text
-        self.mail.attach(MIMEText(self.addPlainTextBody), "plain")
+        mail.attach(MIMEText(str(self.plainTextMessage), "plain"))
+        
+        #attach html verison html is set
+        if self.htmlFlag:
+            mail.attach(MIMEText(str(self.html), "html"))
 
-        # #add attachment any attachment
-        # if len(self.emailattachment) > 0:
-        #     for filename in self.emailattachment:
-        #         with open(filename, "rb") as file:
-        #             attachment = mimebase("application", "octet-stream")
-        #             attachment.set_payload(file.read())
-        #         encoders.encode_base64(attachment)
-        #         attachment.add_header(
-        #             "content-disposition",
-        #             "attachment; filename = {}".format(filename)
-        #         )
-        #         self.mail.attach(attachment)
+        
+        #add any attachment that was set
+        if len(self.emailAttachment) > 0:
+            for fileName in self.emailAttachment:
+                with open(fileName, "rb") as file:
+                    attachment = MIMEBase("application", "octet-stream")
+                    attachment.set_payload(file.read())
+                encoders.encode_base64(attachment)
+                attachment.add_header(
+                    "content-disposition",
+                    "attachment; filename = {}".format(fileName)
+                )
+                mail.attach(attachment)
         
         #convert message to string
-        message = self.mail.as_string()
+        message = mail.as_string()
         mailServer="smtp.gmail.com"
         serverPortNum = 465
-        
+
+        #sending the email
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(mailServer,serverPortNum,context=context) as serverConn:
             serverConn.login(self.senderEmail,password)
-            serverConn.senderEmail(
+            serverConn.sendmail(
                 self.senderEmail, self.receiverEmail, message
             )
 
-        
+    
+if __name__ == "__main__":
 
-
-
-def main():
-    mail = Mail("smartCamSender2019@gmail.com","verysecurepassword")
-    mail.addReceiver("smartCamReceiver2019@gmail.com")
-    mail.addSubjectHeader("TestHeader1")
+    #without HTML 
+    mail = Mail(senderEmail="SENDEREMAIL@gmail.com", password="passwordHERE")
+    mail.addReceiver("RECEIVEREMAIL@gmail.com")
+    mail.addSubjectHeader("TestSubjectHeader1")
     mail.addPlainTextBody("TestBody1")
     mail.constructNSendMail()
 
-main()
+    #with HTML
+    mail = Mail(senderEmail="SENDEREMAIL@gmail.com", password="passwordHERE")
+    mail.addReceiver("RECEIVEREMAIL@gmail.com")
+    mail.addSubjectHeader("TestSubjectHeader2 WITH HTML")
+    mail.addPlainTextBody("WithHTML", html=True)
+    mail.constructNSendMail()
+
+    #with attach file
+    mail = Mail(senderEmail="SENDEREMAIL@gmail.com", password="passwordHERE")
+    mail.addReceiver("RECEIVEREMAIL@gmail.com")
+    mail.addSubjectHeader("TestSubjectHeader3 WITH HTML")
+    mail.addPlainTextBody("WithHTML", html=True)
+    mail.addAttachment(fileName="tux.jpg")
+    mail.addAttachment(fileName="tux2.jpeg")
+    mail.constructNSendMail()
+
+    #terminal version
+    #not terminal version doesn't have HTML support atm
+    mail = Mail(senderEmail="SENDEREMAIL@gmail.com")
+    mail.constructNSendMail()
