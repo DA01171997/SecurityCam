@@ -131,23 +131,27 @@ class Mail:
     
 if __name__ == "__main__":
 
-    #without HTML 
-    mail = Mail(senderEmail="SENDEREMAIL@gmail.com", password="passwordHERE")
+    #without HTML
+    """ 
+    mail = Mail(senderEmail="smartCamSender2019@gmail.com", password="verysecurepassword")
     mail.addReceiver("RECEIVEREMAIL@gmail.com")
     mail.addSubjectHeader("TestSubjectHeader1")
     mail.addPlainTextBody("TestBody1")
     mail.constructNSendMail()
+    """
 
     #with HTML
+    """
     mail = Mail(senderEmail="SENDEREMAIL@gmail.com", password="passwordHERE")
     mail.addReceiver("RECEIVEREMAIL@gmail.com")
     mail.addSubjectHeader("TestSubjectHeader2 WITH HTML")
     mail.addPlainTextBody("WithHTML", html=True)
     mail.constructNSendMail()
+    """
 
     #with attach file
-    mail = Mail(senderEmail="SENDEREMAIL@gmail.com", password="passwordHERE")
-    mail.addReceiver("RECEIVEREMAIL@gmail.com")
+    mail = Mail(senderEmail="smartCamSender2019@gmail.com", password="verysecurepassword")
+    mail.addReceiver("smartCamReceiver2019@gmail.com")
     mail.addSubjectHeader("TestSubjectHeader3 WITH HTML")
     mail.addPlainTextBody("WithHTML", html=True)
     mail.addAttachment(fileName="tux.jpg")
@@ -156,5 +160,7 @@ if __name__ == "__main__":
 
     #terminal version
     #not terminal version doesn't have HTML support atm
+    """
     mail = Mail(senderEmail="SENDEREMAIL@gmail.com")
     mail.constructNSendMail()
+    """
