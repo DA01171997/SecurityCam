@@ -135,8 +135,11 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         'sender', 
-        help='email address and password to use to send notifications from an SMTP server',
-        nargs=2,
+        help='email address to use to send notifications from an SMTP server',
+    )
+    parser.add_argument(
+        'password', 
+        help='password to use to send notifications from an SMTP server',
     )
     parser.add_argument(
         '--threshold',
@@ -159,8 +162,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     security_cam = SecurityCamera(
         to_email=args.email,
-        from_email=args.sender[0],
-        email_password=args.sender[1],
+        from_email=args.sender,
+        email_password=args.password,
         trigger_dist=args.threshold or 100,
         scan_interval=args.scan or 5,
         trigger_interval=args.cooldown or 15,
