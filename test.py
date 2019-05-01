@@ -4,8 +4,8 @@ import numpy as np
 import time
 import cv2
 
-faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-bodyCascade = cv2.CascadeClassifier('haarcascade_fullbody.xml')
+faceCascade = cv2.CascadeClassifier('./opencv_models/haarcascade_frontalface_default.xml')
+bodyCascade = cv2.CascadeClassifier('./opencv_models/haarcascade_fullbody.xml')
 
 camera = PiCamera()
 camera.resolution = (640, 480)
