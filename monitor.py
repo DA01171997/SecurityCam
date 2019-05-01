@@ -130,11 +130,11 @@ if __name__ == '__main__':
         description='Begins monitoring for activity available distance sensor and camera',
     )
     parser.add_argument(
-        '--email', 
+        'email', 
         help='email address to send notifications to',
     )
     parser.add_argument(
-        '--sender', 
+        'sender', 
         help='email address and password to use to send notifications from an SMTP server',
         nargs=2,
     )
