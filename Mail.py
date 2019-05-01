@@ -162,8 +162,8 @@ if __name__ == "__main__":
             'time_stamp': 'timestamp',
             'distance': 'distance',
     })
-    mail.addAttachment(fileName="tux.jpg")
-    mail.addAttachment(fileName="tux2.jpeg")
+    mail.addAttachment(fileName="./detections/test.jpg")
+    mail.addAttachment(fileName="./detections/test2.jpeg")
     mail.constructNSendMail()
 
     #terminal version

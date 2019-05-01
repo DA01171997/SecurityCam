@@ -35,7 +35,7 @@ class SecurityCamera:
         self.trigger_dist = trigger_dist    # distance threshold
         self.scan_interval = scan_interval  # scan interval
         self.last_trigger = datetime.now()  # last trigger timestamp
-        self.trigger_interval = trigger_dist    # trigger cooldown
+        self.trigger_interval = trigger_interval    # trigger cooldown
         self.range_finder = RangeFinder()   # range finder object
         # computer vision models
         self.face_cascade = cv2.CascadeClassifier('./opencv_models/haarcascade_frontalface_default.xml')
@@ -53,7 +53,7 @@ class SecurityCamera:
         Returns True/False indicating if enough time has elapsed 
         since the last trigger to be ready for activation again
         """
-        return (self.last_trigger - datetime.now()).total_seconds() > self.trigger_interval
+        return abs((self.last_trigger - datetime.now()).total_seconds()) > self.trigger_interval
 
     def send_alert(self, capture_file, capture_timestamp, distance):
         """
@@ -75,6 +75,7 @@ class SecurityCamera:
         )
         self.mailer.addAttachment(fileName=capture_file)    # add the capture file
         self.mailer.constructNSendMail()    # send the notification
+        print('Email alert sent.')
 
     def monitor(self):
         """
@@ -85,9 +86,12 @@ class SecurityCamera:
         distance = None # distance measured
 
         try:
+            print('Monitoring...')
             while True:
                 distance = self.range_finder.get_distance() # check the distance sensor
                 if distance < self.trigger_dist and self.is_trigger_ready():    # no cooldown, and target is close
+                    print('Distance threshold tripped!')
+                    self.last_trigger = datetime.now()
                     with PiCamera() as camera:  # open the camera
                         raw_capture = PiRGBArray(camera, size=(640, 480))   # configure the camera
                         camera.resolution = (640, 480)
@@ -109,8 +113,9 @@ class SecurityCamera:
 
                             # if detections were found, send th
                             if len(self.frame_data['faces']) > 0 or len(self.frame_data['bodies']) > 0:
+                                print('Face or body detected! Sending alert...')
                                 capture_timestamp = datetime.now()  # timestamp for capture
-                                capture_file = 'detection_' + str(capture_timestamp).replace(' ', '_') + '.png' # generate filename from timestamp
+                                capture_file = './detections/detection_' + str(capture_timestamp).replace(' ', '_') + '.png' # generate filename from timestamp
                                 cv2.imwrite(    # write the image data to a file
                                     capture_file,
                                     self.frame_data['img']
