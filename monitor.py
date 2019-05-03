@@ -104,7 +104,6 @@ class SecurityCamera:
                     for (x_top, y_top, width, height) in self.frame_data['faces']: 
                         cv2.rectangle(self.frame_data['img'], (x_top, y_top), (x_top + width, y_top + height), (255, 255, 0), 2)
 
-                    print('frame')
                     cv2.imshow('Camera', frame.array)
                     key = cv2.waitKey(10)
                     if key == 27:
