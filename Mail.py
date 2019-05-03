@@ -48,7 +48,7 @@ class Mail:
         else:
             self.plainTextMessage = plainTextMessage
         if html_context:
-            self.htmlFlag = html_context is None
+            self.htmlFlag = html_context is not None
             template = self.template_env.get_template('detection_alert.jinja')
             self.html = template.render(html_context)
     

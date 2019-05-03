@@ -28,12 +28,12 @@ class SecurityCamera:
         body_cascade -> computer vision classifier for bodies
         frame_data -> holds information on any given frame the camera may be analyzing
     """
-    def __init__(self, to_email, from_email, email_password, trigger_dist=100, trigger_interval=15):
+    def __init__(self, to_email, from_email, email_password, trigger_dist=300, trigger_interval=15):
         self.mailer = Mail(from_email, email_password)  # mailer object
         self.to_email = to_email    # destination email
-        self.trigger_dist = trigger_dist    # distance threshold
+        self.trigger_dist = int(trigger_dist)    # distance threshold
         self.last_trigger = datetime.now()  # last trigger timestamp
-        self.trigger_interval = trigger_interval    # trigger cooldown
+        self.trigger_interval = int(trigger_interval)    # trigger cooldown
         self.range_finder = RangeFinder()   # range finder object
         # computer vision models
         self.face_cascade = cv2.CascadeClassifier('./opencv_models/haarcascade_frontalface_default.xml')
@@ -104,12 +104,17 @@ class SecurityCamera:
                     for (x_top, y_top, width, height) in self.frame_data['faces']: 
                         cv2.rectangle(self.frame_data['img'], (x_top, y_top), (x_top + width, y_top + height), (255, 255, 0), 2)
 
-                    cv2.imShow('Camera', self.frame_data['img'])
+                    print('frame')
+                    cv2.imshow('Camera', frame.array)
+                    key = cv2.waitKey(10)
+                    if key == 27:
+                        break
 
                     # if detections were found, send th
                     if (len(self.frame_data['faces']) > 0 or 
                         len(self.frame_data['bodies']) > 0) and self.is_trigger_ready():
                             distance = self.range_finder.get_distance() # check the distance sensor
+                            print('distance:', distance)
                             if distance < self.trigger_dist:    # no cooldown, and target is close
                                 print('Distance threshold tripped!')
                                 self.last_trigger = datetime.now()
@@ -167,7 +172,7 @@ if __name__ == '__main__':
         to_email=args.email,
         from_email=args.sender,
         email_password=args.password,
-        trigger_dist=args.threshold or 100,
+        trigger_dist=args.threshold or 300,
         trigger_interval=args.cooldown or 15,
     )
     security_cam.monitor()
