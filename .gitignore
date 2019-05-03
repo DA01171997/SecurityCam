@@ -1,0 +1,3 @@
+detections/
+*.pyc
+__pycache__/
