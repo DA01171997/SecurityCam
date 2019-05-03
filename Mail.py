@@ -86,7 +86,7 @@ class Mail:
             password = self.password
 
         #create mail object
-        mail = MIMEMultipart()
+        mail = MIMEMultipart('alternative')
         mail["From"] = self.senderEmail
         mail["To"] = self.receiverEmail
         mail["Subject"] = self.subjectHeader
