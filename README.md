@@ -49,6 +49,18 @@ In order to increase the accuracy of the sensor's readings, a series of samples 
 In other words, the sensor would take several measurements, then average these results to produce the final distance.
 This was done to reduce the chanmce of erroneous values and errors in the distance measurement. 
 
+## Issues Faced
+
+While working on this project, we encountered several issues which had to be discussed and overcome.
+
+### Using OpenCV
+
+Using OpenCV made the computer vision aspect of this projec much easier, but it still came with its own issues. First, installing OpenCV on the Raspberry Pi took some exploration. We eventually found packages for both Python 2 and 3, and then settled on using Python 3. Next, there was the issue of how to feed the camera data into the OpenCV models. While OpenCV has its own functions and methods for accessing cameras, these did not seem to be readily compatible with the Raspberry Pi's camera module. As a result, we eventually had to use an infinite iteration on the camera's frames (from the PiCamera method "caputure_continous") to read in each frame manually. Luckily, the Raspberry Pi is still fast enough to handle the data, so it doesn't provide too many noticeable hitches.
+
+### Triggering The Email
+
+A couple of different methods were tried for triggering the sending of the alert email. At first, the idea was to use a "scan" approach. Simply put, the Raspberry Pi would "scan" the area every few seconds with the distance sensor, then activate the camera component when something gets too close. Following this, the Raspberry Pi would use OpenCV to check if the object was a person, then send the email if it was. However, this approach was not as effective as originally thought. This made the camera more difficult to trigger, and made it such that one couldn't easily view what the Raspberry Pi sees through its camera (since the camera only activates after the distance sensor is tripped). As a result, we ended up reversing this logic. In the current implimentation, the camera uses OpenCV to check for people in its current frame of view. If a person is detected, the camera activates its distance sensor to see if the person is close. If they are within a threshold, then the camera takes a snapshot and sends an email alert. This method proved easier to use, and more predictable in testing.
+
 ### Additional TODOs
 
 Finish README:
