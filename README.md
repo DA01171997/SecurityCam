@@ -55,7 +55,7 @@ While working on this project, we encountered several issues which had to be dis
 
 ### Using OpenCV
 
-Using OpenCV made the computer vision aspect of this projec much easier, but it still came with its own issues. First, installing OpenCV on the Raspberry Pi took some exploration. We eventually found packages for both Python 2 and 3, and then settled on using Python 3. Next, there was the issue of how to feed the camera data into the OpenCV models. While OpenCV has its own functions and methods for accessing cameras, these did not seem to be readily compatible with the Raspberry Pi's camera module. As a result, we eventually had to use an infinite iteration on the camera's frames (from the PiCamera method "caputure_continous") to read in each frame manually. Luckily, the Raspberry Pi is still fast enough to handle the data, so it doesn't provide too many noticeable hitches.
+Using OpenCV made the computer vision aspect of this projec much easier, but it still came with its own issues. First, installing OpenCV on the Raspberry Pi took some exploration. We eventually found packages for both Python 2 and 3, and then settled on using Python 3. Next, there was the issue of how to feed the camera data into the OpenCV models. While OpenCV has its own functions and methods for accessing cameras, these did not seem to be readily compatible with the Raspberry Pi's camera module. As a result, we eventually had to use an infinite iteration on the camera's frames (from the PiCamera method "capture_continuous") to read in each frame manually. Luckily, the Raspberry Pi is still fast enough to handle the data, so it doesn't provide too many noticeable hitches.
 
 ### Triggering The Email
 
