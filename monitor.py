@@ -105,11 +105,12 @@ class SecurityCamera:
                         cv2.rectangle(self.frame_data['img'], (x_top, y_top), (x_top + width, y_top + height), (255, 255, 0), 2)
 
                     cv2.imshow('Camera', frame.array)
+                    # if 'q' key pressed, then break the main loop
                     key = cv2.waitKey(10)
                     if key == 27:
                         break
 
-                    # if detections were found, send th
+                    # if detections were found, begin checking the distance of the subject
                     if (len(self.frame_data['faces']) > 0 or 
                         len(self.frame_data['bodies']) > 0) and self.is_trigger_ready():
                             distance = self.range_finder.get_distance() # check the distance sensor
@@ -128,7 +129,7 @@ class SecurityCamera:
                                 )
                                 self.send_alert(capture_file, capture_timestamp, distance)  # send the email notice
                     raw_capture.truncate(0) # reduce the capture data
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:   # if CTRL+C pressed, stop
             print('Stopping monitoring process.')
 
 
