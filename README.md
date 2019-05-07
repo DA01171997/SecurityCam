@@ -80,3 +80,8 @@ It would be very convenient if a user could look at the camera's view at any tim
 #### Remote Commands
 
 An idea we have had is to allow the camera to process commands by reading in responses to its alerts. Essentially, a user could respond to an alert and tell the camera to take some action. This action could be any number of things, such as: contacting an additional person or the authorities, recording for longer, taking more screenshots, etc.
+
+#### Credits
+
+Haar Casacade training classifiers belongs to The Intel Corperations. Additional licensing informations and documentaions can be found on OpenCV official GitHub Repository.
+https://github.com/opencv/opencv
