@@ -33,7 +33,7 @@ The three most vital functions of this project are:
 
 ### Emailing
 
-To simplify the process of emailing and future customization we wrote Mail class. Mail are sent using the email, smtplib, and ssl modules that come standard on python. The Mail class crudentials can be implicitly setup with an accounts for automation or exlicitly on the terminal for each use. The Mail class support both standard planintext or HTML mail, both verision will be attach if HTML mail option is checked. The Mail class also support multiple attachments, attachments must reside within the same folder or an absolute path is needed.
+To simplify the process of emailing and future customization we wrote a Mail class. Mail are sent using the email, smtplib, and ssl modules that come standard on python. The Mail class crudentials can be implicitly setup with an accounts for automation or exlicitly on the terminal for each use. The Mail class supports both standard planintext or HTML mail, both verision will be attached if HTML mail option is checked. The Mail class also supports multiple attachments of any file type, attachments must reside within the same folder or an absolute path is needed.
 
 ### Distance
 
