@@ -2,6 +2,12 @@
 
 Security camera system build on a Raspberry Pi platform.
 
+Developed by:
+  - Cristopher Hernandez cristopherh@csu.fullerton.edu
+  - Duy Do duy.ado@csu.fullerton.edu
+
+For CPSC-440 Computer System Architecture
+
 ## Basic Functions
 
 The primary function of this system is to alert a user to activity near the area the device is set up.
