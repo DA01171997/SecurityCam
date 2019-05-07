@@ -83,5 +83,6 @@ An idea we have had is to allow the camera to process commands by reading in res
 
 #### Credits
 
-Haar Casacade training classifiers belongs to The Intel Corperations. Additional licensing informations and documentaions can be found on OpenCV official GitHub Repository.
-https://github.com/opencv/opencv
+Haar Casacade training classifiers belongs to The Intel Corperations. Additional licensing informations and documentaions can be found on OpenCV Official GitHub Repository.
+
+OpenCV Official GitHub Repositor: https://github.com/opencv/opencv
