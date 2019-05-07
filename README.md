@@ -20,9 +20,6 @@ This project utilized the following hardware, in addition to the Raspberry Pi bo
 - Raspberry Pi Camera Board V2.1
 - HC-SR04 Ultrasonic Distance Sensor
 
-Wiring for the HC-SR04 was performed on a breadboard, with help from this tutorial:
-https://pimylifeup.com/raspberry-pi-distance-sensor/
-
 ## Implementation
 
 The three most vital functions of this project are:
@@ -86,3 +83,7 @@ An idea we have had is to allow the camera to process commands by reading in res
 Haar Casacade training classifiers belongs to The Intel Corperations. Additional licensing informations and documentations can be found on the OpenCV Official GitHub Repository.
 
 OpenCV Official GitHub Repository: https://github.com/opencv/opencv
+
+Wiring for the HC-SR04 was performed on a breadboard, with help from this tutorial:
+
+https://pimylifeup.com/raspberry-pi-distance-sensor/
