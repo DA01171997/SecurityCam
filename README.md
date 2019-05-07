@@ -6,7 +6,7 @@ Developed by:
   - Cristopher Hernandez cristopherh@csu.fullerton.edu
   - Duy Do duy.ado@csu.fullerton.edu
 
-For CPSC-440 Computer System Architecture
+For CPSC-440 Computer System Architecture.
 
 ## Basic Functions
 
